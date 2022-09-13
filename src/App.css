@@ -13,17 +13,6 @@
   text-align: center;
 }
 
-.Feed {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  grid-gap: 16px;
-  padding: 16px 0;
-  align-items: center;
-  width: 400px;
-  overflow-y: scroll;
-}
-
 .timestamp {
   display: flex;
   width: 100%;

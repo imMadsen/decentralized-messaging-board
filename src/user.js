@@ -19,4 +19,5 @@ export function createAnonymousUser() {
     // Create user
     const [alias, password] = [randomString(8), randomString(8)]
     user.create(alias, password, null, () => user.auth(alias, password))
+    console.log('Created a new anon user.')
 }

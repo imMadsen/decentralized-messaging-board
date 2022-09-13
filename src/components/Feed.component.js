@@ -1,28 +1,27 @@
 import { useContext, useEffect, useState } from 'react';
 import GUN, { SEA } from 'gun'
 import { gun } from "../user";
+import { SettingsContext } from '../contexts/Settings.context';
+
 import { Post } from './Post.component';
 import "./Feed.component.css";
-import { SettingsContext } from '../contexts/Settings.context';
 
 export const Feed = () => {
     const { board } = useContext(SettingsContext)
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
-        setMessages([]);
-
-        gun.get(board + '#messages').on(messages => {
+        setMessages([])
+        gun.get(board.toLowerCase() + '#messages').on(messages => {
             const entries = Object.entries(messages).slice(1)
             const validEntries = [];
-
             entries.forEach(([key, value]) => {
                 try {
                     const { owner, refrence } = JSON.parse(value.slice(3)).m
                     const isValid = SEA.verify(value, owner)
 
                     if (!isValid)
-                        throw "Invalid signature";
+                        throw new Error("Invalid signature");
 
                     const createdAt = GUN.state.is(messages, key);
                     validEntries.push({ owner, refrence, createdAt })
@@ -34,12 +33,12 @@ export const Feed = () => {
         })
     }, [board])
 
-    return (
+    return (                                                                                                                                                                                 
         <div className='Feed'>
             {
                 messages.sort((a, b) => a.createdAt - b.createdAt)
-                    .reverse()
-                    .map((props, key) => <Post key={props.refrence} {...props} />)
+                .reverse()
+                .map((props, key) => <Post key={props.refrence} {...props} />)
             }
         </div>
     )

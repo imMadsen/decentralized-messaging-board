@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from "react";
-import { user } from "../user";
+import { createAnonymousUser, user } from "../user";
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -7,14 +7,19 @@ export function UserProvider({ children }) {
 
     useEffect(() => {
         let _user; 
+
         setInterval(() => {
-            if (_user !== user) {
+            if (_user?.is !== user?.is) {
                 _user = user;
                 update(user)
             }
+
+            if (_user?.is === undefined) {
+                createAnonymousUser()
+            }
         }, 1000)
     }, [])
-
+    
     return (
         <UserContext.Provider
             value={value}
